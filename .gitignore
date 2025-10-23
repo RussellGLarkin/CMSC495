@@ -1,0 +1,33 @@
+# Maven target directory
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+
+# Maven wrapper JAR (downloaded automatically)
+.mvn/wrapper/*.jar
+
+# Compiled class files
+*.class
+
+# VS Code
+.vscode/
+
+# macOS Finder
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*~
+*.swp
+*.swo
+
+# JARs (Maven already stores them in /target)
+*.jar
