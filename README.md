@@ -37,12 +37,26 @@ CMSC495/
 <pre>src/main/java/edu/cmsc495</pre>
 
 ## Building and Running
-Build with: 
+- Build with: 
 <pre>./mvnw clean compile</pre>
-Run with: 
+- Run with: 
 <pre>./mvnw exec:java -Dexec.mainClass=edu.cmsc495.Main</pre>
 
 ## When Adding New Java Files
 - Include the package declaration:
 <pre>package edu.cmsc495;</pre>
 - Place the file under the directory structure shown above.
+
+## Git workflow
+<pre>
+git checkout main
+git pull
+git switch -c name-of-feature/fix
+</pre>
+- Code...
+<pre>
+git add .
+git commit -m "message"
+git push -u origin name-of-feature/fix
+</pre>
+- Open PR on GitHub
