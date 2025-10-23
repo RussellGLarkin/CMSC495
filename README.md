@@ -43,5 +43,6 @@ Run with:
 <pre>./mvnw exec:java -Dexec.mainClass=edu.cmsc495.Main</pre>
 
 ## When Adding New Java Files
-- Include the package declaration: package edu.cmsc495;
+- Include the package declaration:
+<pre>package edu.cmsc495;</pre>
 - Place the file under the directory structure shown above.
