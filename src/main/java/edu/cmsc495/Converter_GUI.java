@@ -82,19 +82,9 @@ public class Converter_GUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String source = (String) sourceCurrency.getSelectedItem();
         String target = (String) targetCurrency.getSelectedItem();
-        double amount;
-        try {
-            amount = Double.parseDouble(amountField.getText());
-        } catch (Exception ex) {
-            resultLabel.setText("Error: " + ex.getMessage());
-            return;
-        }
-        double result = CurrencyConverter.convert(source, target, amount);
-        if (result == -1) { // Error case
-            resultLabel.setText("Result: Conversion error occurred.");
-        } else {
-            resultLabel.setText(String.format("%.2f %s = %.2f %s", amount, source, result, target));
-        }
+        String amountText = amountField.getText();
+        String message = ConverterController.validateCurrency(source, target, amountText);
+        resultLabel.setText(message);
     }
 
     public static void main(String[] args) {
