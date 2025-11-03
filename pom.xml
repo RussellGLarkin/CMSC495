@@ -51,7 +51,7 @@
         <version>3.2.5</version>
       </plugin>
 
-      <!-- (Optional) exec: run a main class via Maven -->
+      <!-- Run a main class via Maven -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
