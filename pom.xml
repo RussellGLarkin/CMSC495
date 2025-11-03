@@ -13,6 +13,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jackson.version>2.17.0</jackson.version>
     <junit.version>5.10.2</junit.version>
+    <main.class>edu.cmsc495.Main</main.class>
+    <app.name>Currency Converter</app.name>
+    <jpackage.app-version>1.0.0</jpackage.app-version>
   </properties>
 
   <dependencies>
@@ -33,6 +36,7 @@
   </dependencies>
 
   <build>
+    <finalName>currency-converter</finalName>
     <plugins>
       <!-- Compiler -->
       <plugin>
@@ -51,6 +55,27 @@
         <version>3.2.5</version>
       </plugin>
 
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.5.2</version>
+          <executions>
+              <execution>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>shade</goal>
+                  </goals>
+                  <configuration>
+                      <transformers>
+                          <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                              <mainClass>${main.class}</mainClass>
+                          </transformer>
+                      </transformers>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+
       <!-- (Optional) exec: run a main class via Maven -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -59,7 +84,59 @@
         <configuration>
           <mainClass>edu.cmsc495.Main</mainClass>
         </configuration>
+        <executions>
+          <execution>
+              <id>jpackage</id>
+              <phase>package</phase>
+              <goals>
+                  <goal>exec</goal>
+              </goals>
+              <configuration>
+                  <executable>${java.home}/bin/jpackage</executable>
+                  <workingDirectory>${project.build.directory}</workingDirectory>
+                  <arguments>
+                      <argument>--name</argument><argument>${app.name}</argument>
+                      <argument>--app-version</argument><argument>${jpackage.app-version}</argument>
+                      <argument>--vendor</argument><argument>UMGC Team</argument>
+                      <argument>--input</argument><argument>${project.build.directory}</argument>
+                      <argument>--main-jar</argument><argument>${project.build.finalName}.jar</argument>
+                      <argument>--main-class</argument><argument>${main.class}</argument>
+                      <argument>--dest</argument><argument>${project.build.directory}/dist</argument>
+                      <argument>--java-options</argument><argument>-Xmx512m</argument>
+                      <argument>--type</argument><argument>${jpackage.type}</argument>
+                      <argument>--icon</argument><argument>${jpackage.icon}</argument>
+                  </arguments>
+              </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+  <profiles>
+        <profile>
+            <id>mac</id>
+            <activation><os><family>mac</family></os></activation>
+            <properties>
+                <jpackage.type>dmg</jpackage.type>
+                <jpackage.icon>${project.basedir}/src/main/resources/app-icon.icns</jpackage.icon>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>windows</id>
+            <activation><os><family>windows</family></os></activation>
+            <properties>
+                <jpackage.type>exe</jpackage.type>
+                <jpackage.icon>${project.basedir}/src/main/resources/app-icon.ico</jpackage.icon>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation><os><family>linux</family></os></activation>
+            <properties>
+                <jpackage.type>deb</jpackage.type>
+                <jpackage.icon>${project.basedir}/src/main/resources/app-icon.png</jpackage.icon>
+            </properties>
+        </profile>
+    </profiles>
 </project>

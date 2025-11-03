@@ -31,3 +31,6 @@ target/
 
 # JARs (Maven already stores them in /target)
 *.jar
+
+# Dependency Reduced POM (Temp maven file)
+dependency-reduced-pom.xml
