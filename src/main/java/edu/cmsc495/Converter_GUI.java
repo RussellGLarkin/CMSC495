@@ -17,7 +17,6 @@ import javax.swing.*;
 
 public class Converter_GUI implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
     private static final List<String> supportedCurrencies = new ArrayList<>();
     private JComboBox<String> sourceCurrency;
     private JComboBox<String> targetCurrency;

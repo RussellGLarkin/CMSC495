@@ -29,13 +29,24 @@ public class CurrencyConverter {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            if (response.statusCode() != 200) {
+                System.err.println("API Error: " + response.statusCode());
+                return -4; // API unavailable or bad response
+            }
+
             ObjectMapper mapper = new ObjectMapper();
             JsonNode json = mapper.readTree(response.body());
-            double rate = json.get("rates").get(target).asDouble();
+            if (json.has("rates") && json.get("rates").has(target)) {
+                double rate = json.get("rates").get(target).asDouble();
+                return amount * rate;
+            } else {
+                return -3; // Unexpected API structure
+            }
 
-            return amount * rate;
-
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+            System.err.println("Network error: " + e.getMessage());
+            return -2; // Network issue (e.g., no internet)
+        } catch (InterruptedException e) {
             e.printStackTrace();
             return -1; // Return -1 to indicate an error occurred
         }

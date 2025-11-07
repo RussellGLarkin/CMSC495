@@ -1,43 +1,61 @@
 package edu.cmsc495;
 
+/*
+ * CMSC 495 7383 Capstone Project - Currency Converter
+ * ConverterController.java
+ * Russell Larkin  |  Alan Espinosa  |  Jeffrey Meja  |  Mark Trent
+ * 
+ * Controller for the currency converter application.
+ */
+
 public class ConverterController {
     // Set a maximum limit for conversion amount
+    // If max or min values are changed, update the corresponding error messages below
     private static final double MAX_AMOUNT = 100_000_000_000_000.0;
+    private static final double MIN_AMOUNT = 1.0;
 
     public static String validateCurrency(String source, String target, String amountStr) {
-        double amount;
+
+        final double amount;
+
+        // Trim whitespace and parse amount
         try {
-            // Trim whitespace and parse amount
-            amount = Double.parseDouble(amountStr.trim());
-            // Round to 2 decimal places (with three decimal places in mind for accuracy)
-            amount = Math.round(amount * 1000.0) / 1000.0;
+            amount = Math.round(Double.parseDouble(amountStr.trim()) * 1000.0) / 1000.0;
+        } catch (NumberFormatException ex) {
+            return "Error: Please enter a valid number.";
+        }
+
+        // Check amount > MIN_AMOUNT
+        if (amount <= MIN_AMOUNT) {
+            return "Error: Please enter a valid positive number of at least 1."; // Update to reflect minimum amount
+        }
+
+        // Check amount < MAX_AMOUNT
+        if (amount > MAX_AMOUNT) {
+            return "Error: Amount exceeds maximum limit of 100 trillion."; // Update to reflect maximum amount
+        }
 
         // If source and target are the same, no conversion needed
         if (source.equals(target)) {
             return String.format("Result: %.2f %s = %.2f %s", amount, source, amount, target);
         }
 
-        // Validate number format
-        } catch (NumberFormatException ex) {
-            return "Error: Please enter a valid number.";
-        }
-
-        // Validate positive amount
-        if (amount <= 0) {
-            return "Error: Please enter a valid positive number.";
-        }
-
-        // Validate maximum amount
-        if (amount > MAX_AMOUNT) {
-            return "Error: Amount exceeds maximum limit of 100 trillion.";
-        }
-        
         // Perform conversion
         double result = CurrencyConverter.convert(source, target, amount);
-        if (result == -1) {
-            return "Result: Conversion error occurred.";
-        } else {
-            return String.format("Result: %.2f %s = %.2f %s", amount, source, result, target);
+
+        // Negative return values indicate specific error conditions
+        // Default case handles successful conversion
+        switch ((int) result) {
+            case -1:
+                return "Error: Conversion request was interrupted.";
+            case -2:
+                return "Error: No internet connection. Please check your network.";
+            case -3:
+                return "Error: Unexpected response from the currency service.";
+            case -4:
+                return "Error: Currency API service is unavailable right now.";
+            default:
+                return String.format("Result: %.2f %s = %.2f %s", amount, source, result, target);
         }
     }
 }
