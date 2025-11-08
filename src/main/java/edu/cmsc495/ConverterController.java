@@ -12,7 +12,7 @@ public class ConverterController {
     // Set a maximum limit for conversion amount
     // If max or min values are changed, update the corresponding error messages below
     private static final double MAX_AMOUNT = 100_000_000_000_000.0;
-    private static final double MIN_AMOUNT = 1.0;
+    private static final double MIN_AMOUNT = 0.01;
 
     public static String validateCurrency(String source, String target, String amountStr) {
 
@@ -26,8 +26,8 @@ public class ConverterController {
         }
 
         // Check amount > MIN_AMOUNT
-        if (amount <= MIN_AMOUNT) {
-            return "Error: Please enter a valid positive number of at least 1."; // Update to reflect minimum amount
+        if (amount < MIN_AMOUNT) {
+            return "Error: Please enter a valid positive number of at least 0.01."; // Update to reflect minimum amount
         }
 
         // Check amount < MAX_AMOUNT
