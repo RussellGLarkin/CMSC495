@@ -31,3 +31,6 @@ target/
 
 # JARs (Maven already stores them in /target)
 *.jar
+
+# Output directory
+output/
