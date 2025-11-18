@@ -32,5 +32,10 @@ target/
 # JARs (Maven already stores them in /target)
 *.jar
 
+<<<<<<< HEAD
 # Dependency Reduced POM (Temp maven file)
 dependency-reduced-pom.xml
+=======
+# Output directory
+output/
+>>>>>>> main
