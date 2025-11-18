@@ -20,13 +20,13 @@ public class CurrencyConverterTest {
     @Test
     void rejectsZero() {
         String msg = ConverterController.validateCurrency("USD", "BRL", "0");
-        assertEquals("Error: Please enter a valid positive number of at least 1.", msg);
+        assertEquals("Error: Please enter a valid positive number of at least 0.01.", msg);
     }
 
     @Test
     void rejectsNegative() {
         String msg = ConverterController.validateCurrency("USD", "AUD", "-10");
-        assertEquals("Error: Please enter a valid positive number of at least 1.", msg);
+        assertEquals("Error: Please enter a valid positive number of at least 0.01.", msg);
     }
 
     @Test
