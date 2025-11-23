@@ -39,6 +39,24 @@
         </executions>
       </plugin>
       <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir />
+                <copy />
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.2.0</version>
@@ -60,7 +78,7 @@
                 <argument>--vendor</argument>
                 <argument>UMGC Team</argument>
                 <argument>--input</argument>
-                <argument>${project.build.directory}</argument>
+                <argument>${project.build.directory}/jpackage-input</argument>
                 <argument>--main-jar</argument>
                 <argument>${project.build.finalName}.jar</argument>
                 <argument>--main-class</argument>
