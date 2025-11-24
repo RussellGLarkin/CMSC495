@@ -153,8 +153,12 @@
             <id>linux</id>
             <activation><os><family>linux</family></os></activation>
             <properties>
-                <jpackage.type>deb</jpackage.type>
+                <jpackage.type>app-image</jpackage.type>
                 <jpackage.icon>${project.basedir}/src/main/resources/app-icon.png</jpackage.icon>
+                    <jpackage.extraArgs>
+                      --linux-shortcut
+                      --linux-menu-group Utilities
+    </jpackage.extraArgs>
             </properties>
         </profile>
     </profiles>
