@@ -55,26 +55,31 @@
         <version>3.2.5</version>
       </plugin>
 
+      <!-- Build a runnable fat JAR -->
       <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>3.5.2</version>
-          <executions>
-              <execution>
-                  <phase>package</phase>
-                  <goals>
-                      <goal>shade</goal>
-                  </goals>
-                  <configuration>
-                      <transformers>
-                          <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                              <mainClass>${main.class}</mainClass>
-                          </transformer>
-                      </transformers>
-                  </configuration>
-              </execution>
-          </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <!-- Don't generate dependency-reduced-pom.xml -->
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${main.class}</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
+
+      <!-- Prepare input directory for jpackage -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -82,7 +87,9 @@
         <executions>
           <execution>
             <phase>package</phase>
-            <goals><goal>run</goal></goals>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <configuration>
               <target>
                 <mkdir dir="${project.build.directory}/jpackage-input"/>
@@ -94,72 +101,87 @@
         </executions>
       </plugin>
 
-      <!-- Run a main class via Maven -->
+      <!-- Run jpackage via Maven -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.2.0</version>
         <configuration>
-          <mainClass>edu.cmsc495.Main</mainClass>
+          <mainClass>${main.class}</mainClass>
         </configuration>
         <executions>
           <execution>
-              <id>jpackage</id>
-              <phase>package</phase>
-              <goals>
-                  <goal>exec</goal>
-              </goals>
-              <configuration>
-                  <executable>${java.home}/bin/jpackage</executable>
-                  <workingDirectory>${project.build.directory}</workingDirectory>
-                  <arguments>
-                      <argument>--name</argument><argument>${app.name}</argument>
-                      <argument>--app-version</argument><argument>${jpackage.app-version}</argument>
-                      <argument>--vendor</argument><argument>UMGC Team</argument>
-                      <argument>--input</argument><argument>${project.build.directory}/jpackage-input</argument>
-                      <argument>--main-jar</argument><argument>${project.build.finalName}.jar</argument>
-                      <argument>--main-class</argument><argument>${main.class}</argument>
-                      <argument>--dest</argument><argument>${project.build.directory}/dist</argument>
-                      <argument>--java-options</argument><argument>-Xmx512m</argument>
-                      <argument>--type</argument><argument>${jpackage.type}</argument>
-                      <argument>--icon</argument><argument>${jpackage.icon}</argument>
-
-                  </arguments>
-              </configuration>
+            <id>jpackage</id>
+            <phase>package</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${java.home}/bin/jpackage</executable>
+              <workingDirectory>${project.build.directory}</workingDirectory>
+              <arguments>
+                <argument>--name</argument><argument>${app.name}</argument>
+                <argument>--app-version</argument><argument>${jpackage.app-version}</argument>
+                <argument>--vendor</argument><argument>UMGC Team</argument>
+                <argument>--input</argument><argument>${project.build.directory}/jpackage-input</argument>
+                <argument>--main-jar</argument><argument>${project.build.finalName}.jar</argument>
+                <argument>--main-class</argument><argument>${main.class}</argument>
+                <argument>--dest</argument><argument>${project.build.directory}/dist</argument>
+                <argument>--java-options</argument><argument>-Xmx512m</argument>
+                <argument>--type</argument><argument>${jpackage.type}</argument>
+                <argument>--icon</argument><argument>${jpackage.icon}</argument>
+              </arguments>
+            </configuration>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-  <profiles>
-        <profile>
-            <id>mac</id>
-            <activation><os><family>mac</family></os></activation>
-            <properties>
-                <jpackage.type>dmg</jpackage.type>
-                <jpackage.icon>${project.basedir}/src/main/resources/app-icon.icns</jpackage.icon>
-            </properties>
-        </profile>
 
-        <profile>
-            <id>windows</id>
-            <activation><os><family>windows</family></os></activation>
-            <properties>
-                <jpackage.type>exe</jpackage.type>
-                <jpackage.icon>${project.basedir}/src/main/resources/app-icon.ico</jpackage.icon>
-            </properties>
-        </profile>
-        <profile>
-            <id>linux</id>
-            <activation><os><family>linux</family></os></activation>
-            <properties>
-                <jpackage.type>app-image</jpackage.type>
-                <jpackage.icon>${project.basedir}/src/main/resources/app-icon.png</jpackage.icon>
-                    <jpackage.extraArgs>
-                      --linux-shortcut
-                      --linux-menu-group Utilities
-    </jpackage.extraArgs>
-            </properties>
-        </profile>
-    </profiles>
+  <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <properties>
+        <jpackage.type>dmg</jpackage.type>
+        <jpackage.icon>${project.basedir}/src/main/resources/app-icon.icns</jpackage.icon>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <jpackage.type>exe</jpackage.type>
+        <jpackage.icon>${project.basedir}/src/main/resources/app-icon.ico</jpackage.icon>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <family>linux</family>
+        </os>
+      </activation>
+      <properties>
+        <jpackage.type>app-image</jpackage.type>
+        <jpackage.icon>${project.basedir}/src/main/resources/app-icon.png</jpackage.icon>
+        <!-- extra args defined but not yet wired into jpackage call -->
+        <jpackage.extraArgs>
+          --linux-shortcut
+          --linux-menu-group
+          Utilities
+        </jpackage.extraArgs>
+      </properties>
+    </profile>
+  </profiles>
 </project>
