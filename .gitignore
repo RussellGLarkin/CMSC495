@@ -35,7 +35,12 @@ target/
 <<<<<<< HEAD
 # Dependency Reduced POM (Temp maven file)
 dependency-reduced-pom.xml
+<<<<<<< HEAD
 =======
 # Output directory
 output/
 >>>>>>> main
+=======
+
+CurrencyConverter.java
+>>>>>>> 0792a77 (Clean up and add files to gitignore)
