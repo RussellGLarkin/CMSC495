@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Currency Converter
+Exec=Currency Converter
+Icon=app-icon
+Comment=A simple currency conversion tool built in Java
+Categories=Utility;Finance;
+Terminal=false
+
